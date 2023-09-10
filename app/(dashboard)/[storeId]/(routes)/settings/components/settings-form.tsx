@@ -14,7 +14,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 
-
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -40,8 +39,8 @@ type SettingsFormValues = z.infer<typeof formSchema>;
 
 export const SettingsForm: React.FC<SettingsFormProps> = ({
     initialData
-}) => {
-
+}) => {  
+  
     const params =useParams();
     const router = useRouter();
 
@@ -99,7 +98,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                             <FormItem>
                                 <FormLabel>Name</FormLabel>
                                 <FormControl>
-                                    <Input disabled={loading} placeholder="Store Name"/>
+                                    <Input disabled={loading} placeholder="Store Name" {...field}/>
                                 </FormControl>
                                 <FormMessage/>
                             </FormItem>

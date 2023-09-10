@@ -5,15 +5,15 @@ import prismadb from "@/lib/prismadb";
 
 import { SettingsForm } from "./components/settings-form";
 
- interface SettingsPageProps {
+interface SettingsPageProps {
     params: {
         storeId: string;
     }
- };
+};
  
- const SettingsPage: React.FC<SettingsPageProps>  = async ({
+const SettingsPage: React.FC<SettingsPageProps>  = async ({
     params 
- }) => {
+}) => {
     const {userId} = auth();
 
     if (!userId) {
@@ -28,7 +28,7 @@ import { SettingsForm } from "./components/settings-form";
     });
 
     if (!store) {
-        redirect("/")
+        redirect("/");
     }
 
     return (
@@ -38,6 +38,6 @@ import { SettingsForm } from "./components/settings-form";
             </div>
         </div>
     );
- }
+}
 
  export default SettingsPage;
