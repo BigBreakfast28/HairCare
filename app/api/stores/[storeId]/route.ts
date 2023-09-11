@@ -36,7 +36,7 @@ req: Request,
 
         return NextResponse.json(store);
     } catch (error) {
-        console.log('[STORE_POST]',error);
+        console.log('[STORE_PATCH]',error);
         return new NextResponse("Internal error",{status:500});
         }
 };
