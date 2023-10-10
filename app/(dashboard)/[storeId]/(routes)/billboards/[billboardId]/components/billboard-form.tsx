@@ -29,6 +29,7 @@ import { AlertModal } from "@/components/modals/alert-modal";
 import { ApiAlert } from "@/components/ui/api-alert";
 import { APP_BUILD_MANIFEST } from "next/dist/shared/lib/constants";
 import { useOrigin } from "@/hooks/use-origin";
+import ImageUpload from "@/components/ui/image-upload";
 
 const formSchema = z.object({
     label: z.string().min(1),
@@ -120,6 +121,21 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
             <Separator />
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
+                    <FormField
+                            control={form.control}
+                            name="imageUrl"
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>Background Image</FormLabel>
+                                    <FormControl>
+                                      <ImageUpload 
+                                      value={field.value ? [field.value] : []}
+                                      />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                            />
                     <div className="grid grid-cols-3 gap-8">
                         <FormField
                         control={form.control}
