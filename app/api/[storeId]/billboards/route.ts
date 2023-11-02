@@ -20,11 +20,11 @@ export async function POST (
         }
 
         if (!label) {
-            return new NextResponse("Name is required", {status:400})
+            return new NextResponse("Label is required", {status:400})
         }
 
         if (!imageUrl) {
-            return new NextResponse("Name is required", {status:400})
+            return new NextResponse("Image is required", {status:400})
         }
 
         const billboard = await prismadb.billboard.create({
@@ -36,10 +36,25 @@ export async function POST (
                 
             }
         });
+
+        if (!params.storeId) {
+            return new NextResponse("Store is required", {status:400})
+        }
+
+        const storeByUserId = await prismadb.store.findFirst ({
+            where : {
+                id: params.storeId,
+                userId
+            }
+        });
+
+        if (!storeByUserId) {
+            return new NextResponse("Unauthorized", {status:403})
+        }
         
-    return NextResponse.json(store);
+    return NextResponse.json(billboard);
     } catch (error) {
-        console.log('[STORES_POST]', error);
+        console.log('[BILLBOARDS_POST]', error);
         return new NextResponse("Interal error", {status:500});
     }    
 }
