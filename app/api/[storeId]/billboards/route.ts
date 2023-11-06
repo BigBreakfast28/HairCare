@@ -27,6 +27,10 @@ export async function POST (
             return new NextResponse("Image is required", {status:400})
         }
 
+        if (!params.storeId) {
+            return new NextResponse("Store is required", {status:400})
+        }
+
         const billboard = await prismadb.billboard.create({
             data: {
                 label,
@@ -36,10 +40,6 @@ export async function POST (
                 
             }
         });
-
-        if (!params.storeId) {
-            return new NextResponse("Store is required", {status:400})
-        }
 
         const storeByUserId = await prismadb.store.findFirst ({
             where : {
