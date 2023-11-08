@@ -8,6 +8,7 @@ import { Billboard } from "@prisma/client";
 import { Plus } from "lucide-react";
 
 import { useParams, useRouter } from "next/navigation";
+import { BillboardColumn } from "./columns";
 
 interface BillboardClientProps {
     data: Billboard[]
