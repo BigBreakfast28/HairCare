@@ -1,7 +1,7 @@
 "use-client"
+
 import toast from "react-hot-toast";
 
-import { Billboard } from "@prisma/client";
 import { BillboardColumn } from "./columns";
 import { 
     DropdownMenu, 
@@ -11,6 +11,7 @@ import {
     DropdownMenuItem
 } from "@radix-ui/react-dropdown-menu";
 import { Button } from "@/components/ui/button";
+
 import { Edit, MoreHorizontal } from "lucide-react";
 
 
@@ -21,8 +22,8 @@ interface CellActionProps {
 export const CellAction: React.FC<CellActionProps> = ({
     data
 }) => {
-    const onCopy = (description:string) => {
-        navigator.clipboard.writeText(description);
+    const onCopy = (id:string) => {
+        navigator.clipboard.writeText(id);
         toast.success("API Route copied to the clipboard")
     };
 
