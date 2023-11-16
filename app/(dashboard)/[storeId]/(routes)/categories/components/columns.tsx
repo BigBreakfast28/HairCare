@@ -8,7 +8,6 @@ export type CategoryColumn = {
   id: string
   name: string
   billboardLabel: string
-  label: string
   createdAt: string;
 }
 
@@ -16,6 +15,11 @@ export const columns: ColumnDef<CategoryColumn>[] = [
   {
     accessorKey: "label",
     header: "Label",
+  },
+  {
+    accessorKey: "billboard",
+    header: "Billboard",
+    cell: ({ row }) => row.original.billboardLabel,
   },
   {
     accessorKey: "createdAt",
