@@ -1,6 +1,6 @@
 import prismadb from "@/lib/prismadb";
 
-import {BillboardClient} from "./components/client";
+import {CategoryClient} from "./components/client";
 import {CategoryColumn} from "./components/columns";
 
 import {format} from "date-fns"
@@ -33,7 +33,7 @@ const CategoriesPage = async ({
     return (
         <div className="flex-col">
             <div className="flex-1 space-y p-8 pt-6">
-                <BillboardClient data={formattedCategories}/>
+                <CategoryClient data={formattedCategories}/>
             </div>
         </div>
     );
