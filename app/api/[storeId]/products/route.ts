@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
 
 import prismadb from '@/lib/prismadb';
- 
+
 export async function POST(
   req: Request,
   { params }: { params: { storeId: string } }
@@ -12,16 +12,7 @@ export async function POST(
 
     const body = await req.json();
 
-    const { 
-      name,
-      price,
-      categoryId,
-      colorId,
-      sizeId,
-      images,
-      isFeatured,
-      isArchived,
-     } = body;
+    const { name, price, categoryId, colorId, sizeId, images, isFeatured, isArchived } = body;
 
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 403 });
@@ -30,26 +21,25 @@ export async function POST(
     if (!name) {
       return new NextResponse("Name is required", { status: 400 });
     }
+
+    if (!images || !images.length) {
+      return new NextResponse("Images are required", { status: 400 });
+    }
+
     if (!price) {
       return new NextResponse("Price is required", { status: 400 });
     }
+
     if (!categoryId) {
-      return new NextResponse("Category ID is required", { status: 400 });
+      return new NextResponse("Category id is required", { status: 400 });
     }
+
     if (!colorId) {
-      return new NextResponse("Color ID is required", { status: 400 });
+      return new NextResponse("Color id is required", { status: 400 });
     }
+
     if (!sizeId) {
-      return new NextResponse("Size ID is required", { status: 400 });
-    }
-    if (!images || !images.length ) {
-      return new NextResponse("Image is required", { status: 400 });
-    }
-    if (!isFeatured) {
-      return new NextResponse("Feature is required", { status: 400 });
-    }
-    if (!isArchived) {
-      return new NextResponse("Archive is required", { status: 400 });
+      return new NextResponse("Size id is required", { status: 400 });
     }
 
     if (!params.storeId) {
@@ -59,7 +49,7 @@ export async function POST(
     const storeByUserId = await prismadb.store.findFirst({
       where: {
         id: params.storeId,
-        userId,
+        userId
       }
     });
 
@@ -71,20 +61,20 @@ export async function POST(
       data: {
         name,
         price,
+        isFeatured,
+        isArchived,
         categoryId,
         colorId,
         sizeId,
-        images : {
+        storeId: params.storeId,
+        images: {
           createMany: {
             data: [
-              ...images.map((image: { url: string }) => image )
-            ]
-          }
+              ...images.map((image: { url: string }) => image),
+            ],
+          },
         },
-        isFeatured,
-        isArchived,
-        storeId: params.storeId,
-      }
+      },
     });
   
     return NextResponse.json(product);
@@ -96,15 +86,14 @@ export async function POST(
 
 export async function GET(
   req: Request,
-  { params }: { params: { storeId: string } }
+  { params }: { params: { storeId: string } },
 ) {
   try {
     const { searchParams } = new URL(req.url)
-    const categoryId = searchParams.get("categoryId") || undefined;
-    const colorId = searchParams.get("colorId") || undefined;
-    const sizeId = searchParams.get("sizeId") || undefined;
-    const isFeatured = searchParams.get("isFeatured");
-    const isArchived = searchParams.get("isArchived");
+    const categoryId = searchParams.get('categoryId') || undefined;
+    const colorId = searchParams.get('colorId') || undefined;
+    const sizeId = searchParams.get('sizeId') || undefined;
+    const isFeatured = searchParams.get('isFeatured');
 
     if (!params.storeId) {
       return new NextResponse("Store id is required", { status: 400 });
@@ -116,9 +105,17 @@ export async function GET(
         categoryId,
         colorId,
         sizeId,
-        isFeatured: isFeatured ? true: undefined,
-        isArchived: false 
-
+        isFeatured: isFeatured ? true : undefined,
+        isArchived: false,
+      },
+      include: {
+        images: true,
+        category: true,
+        color: true,
+        size: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
       }
     });
   

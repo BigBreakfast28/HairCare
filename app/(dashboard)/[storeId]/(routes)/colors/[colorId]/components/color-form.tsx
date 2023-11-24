@@ -24,11 +24,10 @@ import { Separator } from "@/components/ui/separator"
 import { Heading } from "@/components/ui/heading"
 import { AlertModal } from "@/components/modals/alert-modal"
 
-
 const formSchema = z.object({
-  name: z.string().min(1),
-  value: z.string().min(4).regex(/$^#/, {
-    message: 'String must be a valid hex code',
+  name: z.string().min(2),
+  value: z.string().min(4).max(9).regex(/^#/, {
+    message: 'String must be a valid hex code'
   }),
 });
 
@@ -55,8 +54,7 @@ export const ColorForm: React.FC<ColorFormProps> = ({
   const form = useForm<ColorFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
-      name: '',
-      value: ''
+      name: ''
     }
   });
 
@@ -81,12 +79,12 @@ export const ColorForm: React.FC<ColorFormProps> = ({
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/color/${params.colorId}`);
+      await axios.delete(`/api/${params.storeId}/colors/${params.colorId}`);
       router.refresh();
-      router.push(`/${params.storeId}/color`);
+      router.push(`/${params.storeId}/colors`);
       toast.success('Color deleted.');
     } catch (error: any) {
-      toast.error('Make sure you removed all products using this size first.');
+      toast.error('Make sure you removed all products using this color first.');
     } finally {
       setLoading(false);
       setOpen(false);
@@ -117,7 +115,6 @@ export const ColorForm: React.FC<ColorFormProps> = ({
       <Separator />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
-         
           <div className="md:grid md:grid-cols-3 gap-8">
             <FormField
               control={form.control}
@@ -132,18 +129,18 @@ export const ColorForm: React.FC<ColorFormProps> = ({
                 </FormItem>
               )}
             />
-             <FormField
+            <FormField
               control={form.control}
               name="value"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Value</FormLabel>
                   <FormControl>
-                    <div className="flex item-center gap-x-4">
+                    <div className="flex items-center gap-x-4">
                       <Input disabled={loading} placeholder="Color value" {...field} />
                       <div 
-                        className="border p-4 rounded-full"
-                        style={{backgroundColor: field.value}}
+                        className="border p-4 rounded-full" 
+                        style={{ backgroundColor: field.value }}
                       />
                     </div>
                   </FormControl>
